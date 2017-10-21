@@ -1,0 +1,5 @@
+Etapes de programmation de l'appli mobile de reconnaissance d'images
+
+1- Interface de l'application
+2- Fonction qui capture une image, la charge en nuances de gris et calcule l'image LBP correspondante
+3- Fonction qui lit dans les fichiers descripteurs et compare l'image LBP de l'image capturée avec les descripteurs et retourne la classe d'appartenance de l'image capturée
