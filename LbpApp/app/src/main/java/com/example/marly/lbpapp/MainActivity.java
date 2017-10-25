@@ -21,7 +21,10 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Vector;
 
 import static java.lang.Math.abs;
@@ -58,31 +61,146 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Bitmap image = BitmapFactory.decodeResource(getResources(),R.drawable.imagetest);
+        Bitmap image = null;
+        String verdict= new String();
 
-        Utils.bitmapToMat(image,imageOpencv);
-        Imgproc.cvtColor(imageOpencv, imageOpencv, Imgproc.COLOR_BGR2GRAY);
-
-        Bitmap imgray = Bitmap.createBitmap(imageOpencv.width(),imageOpencv.height(), Bitmap.Config.ARGB_8888);
-        Bitmap lbpBitmap = Bitmap.createBitmap(imageOpencv.width(),imageOpencv.height(), Bitmap.Config.ARGB_8888);
-
-
-        Utils.matToBitmap(imageOpencv,imgray);
 
         LBP imLbp = new LBP();
+        Histogramme hist = new Histogramme();
+        try {
+            image = BitmapFactory.decodeResource(getResources(), R.drawable.imagetest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Utils.bitmapToMat(image,imageOpencv);
+        Bitmap lbpBitmap = Bitmap.createBitmap(imageOpencv.width(),imageOpencv.height(), Bitmap.Config.ARGB_8888);
+        Bitmap imgray = Bitmap.createBitmap(imageOpencv.width(),imageOpencv.height(), Bitmap.Config.ARGB_8888);
+        Imgproc.cvtColor(imageOpencv, imageOpencv, Imgproc.COLOR_BGR2GRAY);
+        Utils.matToBitmap(imageOpencv,imgray);
+        imLbp.setImageLbp(imageOpencv);
+        Utils.matToBitmap(imLbp.getImageLbp(),lbpBitmap);
+        hist.setTab(imLbp.getImageLbp());
+
+       // ImageView vue = (ImageView)findViewById(R.id.vue);
+        //test affichage image lbp
+        //vue.setImageBitmap(lbpBitmap);
+
+        //chargement des histogrammes des images de la base d'apprentissage
+        verdict=comparaison(histReference(),hist.getTab());
+
+        //test affichage histogramme
+        /*for(int i= 0; i<255;i++){
+
+            System.out.println("nb pixels"+i+" : "+hist.getTab()[i]);
+
+        }*/
 
 
 
-        Utils.matToBitmap(imLbp.setMat(imageOpencv),lbpBitmap);
+
+
+
+        TextView text = (TextView) findViewById(R.id.sample_text);
+        text.setText(verdict);
+
+
+
+    }
 
 
 
 
-        ImageView vue = (ImageView)findViewById(R.id.vue);
-        //TextView text = (TextView) findViewById(R.id.sample_text);
+    public int[][]histReference(){
 
-        //text.setText(Double.toString(pixel));
-        vue.setImageBitmap(lbpBitmap);
+        TextView textViewFile = (TextView) findViewById(R.id.TextViewFileReader);
+
+        InputStream inputStream = getResources().openRawResource(R.raw.histogrames);
+
+        InputStreamReader inputreader = new InputStreamReader(inputStream);
+        BufferedReader buffreader = new BufferedReader(inputreader);
+        String line;
+        StringBuilder text = new StringBuilder();
+        String [] tab = new String[20];
+        String[] words = new String[256];
+        int [][]values = new int[20][256];
+
+        try {
+
+            int i=0;
+            while (( line = buffreader.readLine()) != null) {
+
+
+                tab[i]=line;
+                i++;
+            }
+
+
+            buffreader.close();
+            inputStream.close();
+
+
+
+        } catch (IOException e) {
+
+        }
+
+
+        for (int i =0;i<20;i++){
+
+            words = tab[i].split(",");
+
+
+            for(int k=0; k<256; k++){
+                values[i][k]= Integer.parseInt(words[k]);
+
+            }
+
+        }
+
+        //textViewFile.setText(Integer.toString(values[0][254]));
+
+        return values;
+
+
+    }
+
+
+    public String comparaison(int [][]ref,int [] hisTest){
+
+        int s=0, min=0, indic=0, type=0;
+        int [][]tab = new int[20][2];
+        String message = new String();
+
+        for (int i=0;i<20;i++){
+            for(int j=0;j<255;j++){
+                s = s+ abs(ref[i][j]-hisTest[j]);
+                indic=ref[i][255];
+                tab[i][0]=s;
+                tab[i][1]=indic;
+            }
+        }
+
+
+        min = tab[0][0];
+        for(int k=0;k<20;k++){
+
+            if(tab[k][0]<min){
+                min = tab[k][0];
+                type = tab[k][1];
+            }
+        }
+
+        if(type==0){
+            message = "Cette image est celle d'un batiment";
+        }
+        else if (type==1){
+            message= "Cette image est celle d'une végétation";
+        }
+        else
+            message= "Désolé, cette image ne correspond à aucune de notre base d'apprentissage";
+
+        return message;
 
     }
 }

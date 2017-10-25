@@ -18,11 +18,11 @@ public class LBP {
 
 
     public LBP() {
-        imageLbp = new Mat(0,0, CvType.CV_8U);
+        this.imageLbp = new Mat(0,0, CvType.CV_8U);
     }
 
-    public Mat setMat(Mat imageSrc){
-        Mat resultImage = new Mat(imageSrc.rows(),imageSrc.cols(), CvType.CV_8U);
+    public void setImageLbp(Mat imageSrc){
+         this.imageLbp = new Mat(imageSrc.rows(),imageSrc.cols(), CvType.CV_8U);
 
 
         for(int i=1; i< imageSrc.size().height-1; i++){
@@ -98,7 +98,7 @@ public class LBP {
                     }
 
 
-                    resultImage.put(i,j,BinaryToDecimal(nbinaire));
+                    this.imageLbp.put(i,j,BinaryToDecimal(nbinaire));
 
 
 
@@ -108,8 +108,11 @@ public class LBP {
 
 
 
+    }
 
-        return resultImage;
+
+    public Mat getImageLbp(){
+        return imageLbp;
     }
 
 
