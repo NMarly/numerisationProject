@@ -4,6 +4,7 @@ import org.opencv.core.Mat;
 
 /**
  * Created by Marly on 25/10/2017.
+ * Classe qui crée l'histogramme d'une image
  */
 
 public class Histogramme {

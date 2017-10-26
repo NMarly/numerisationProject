@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -10,20 +11,59 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.marly.lbpapp.MainActivity">
 
-    <TextView
-        android:id="@+id/sample_text"
+
+    <Button
+        android:text="Prendre une photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-         />
+        android:layout_marginBottom="38dp"
+        android:id="@+id/capture"
+        android:onClick="launchCamera"
+        android:layout_marginStart="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="Detecter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/capture"
+        android:layout_alignEnd="@+id/imageLue"
+        android:layout_marginEnd="21dp"
+        android:id="@+id/resultButton" />
 
     <ImageView
-        android:id="@+id/vue"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        app:srcCompat="@android:drawable/screen_background_dark"
+        android:id="@+id/imageLue"
+        android:layout_width="175dp"
+        android:layout_height="300dp"
+        android:layout_alignTop="@+id/cadrephoto"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_height="300dp"
+        app:srcCompat="@android:drawable/screen_background_light"
+        android:layout_marginTop="44dp"
+        android:id="@+id/cadrephoto"
+        android:layout_width="175dp"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/imageLue" />
 
     <TextView
-        android:id="@+id/TextViewFileReader"
+        android:text="Image source"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        android:id="@+id/labelsource"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/imageLue"
+        android:layout_marginEnd="35dp"
+        android:layout_marginTop="24dp" />
+
+    <TextView
+        android:text="Image LBP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/labelsource"
+        android:layout_alignStart="@+id/resultButton"
+        android:id="@+id/lbpLabel" />
 </RelativeLayout>

@@ -10,7 +10,9 @@ import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 /**
  * Created by Marly on 24/10/2017.
+ * Classe qui calcule une image LBP
  */
+
 
 public class LBP {
 
