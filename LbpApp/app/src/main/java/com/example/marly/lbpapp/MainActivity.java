@@ -270,27 +270,36 @@ public class MainActivity extends AppCompatActivity {
     //méthode qui calcule la distance entre l'histogramme de l'image test et les histogrammes de référence
     public String comparaison(int [][]ref,int [] hisTest){
 
-        int s=0, min=0, indic=0, type=0;
+        int s=0, min=0, type=0,indic;
         int [][]tab = new int[20][2];
         String message = new String();
 
         for (int i=0;i<20;i++){
+            s=0;
+            Log.d(" s entre deux calcul",Integer.toString(s));
             for(int j=0;j<255;j++){
                 s = s+ abs(ref[i][j]-hisTest[j]);
                 indic=ref[i][255];
                 tab[i][0]=s;
                 tab[i][1]=indic;
             }
+            Log.d(" val_s",Integer.toString(s)+"- ligne"+Integer.toString(i));
         }
 
 
-        min = tab[0][0];
+        min = Integer.MAX_VALUE;
+        Log.d("val_min_entree", Integer.toString(min));
         for(int k=0;k<20;k++){
 
             if(tab[k][0]<min){
                 min = tab[k][0];
                 type = tab[k][1];
             }
+
+
+            Log.d("val_min_sortie", Integer.toString(min));
+            Log.d("val_tableau_distance", Integer.toString(tab[k][0]));
+
         }
 
         if(type==0){
